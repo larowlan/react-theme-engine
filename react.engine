@@ -1,0 +1,55 @@
+<?php
+
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Extension\Extension;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
+
+/**
+ * Implements hook_theme().
+ */
+function react_theme($existing, $type, $theme, $path) {
+  return drupal_find_theme_templates($existing, '.html.jsx', $path);
+}
+
+/**
+ * Implements hook_extension().
+ */
+function react_extension() {
+  return '.html.jsx';
+}
+
+/**
+ * Includes .theme file from themes.
+ *
+ * @param \Drupal\Core\Extension\Extension $theme
+ *   The theme extension object.
+ */
+function react_init(Extension $theme) {
+  $theme->load();
+}
+
+/**
+ * Implements hook_render_template().
+ */
+function react_render_template($template_file, $variables) {
+  // @todo handle markup interface, render arrays.
+  $encoded_variables = Json::encode($variables);
+  try {
+    $process = new Process([
+      '/usr/local/bin/node',
+      sprintf('%s/index.js', __DIR__),
+      sprintf('%s/%s', DRUPAL_ROOT, $template_file),
+      $encoded_variables,
+    ]);
+    $process->setWorkingDirectory(__DIR__);
+    $process->run();
+    if (!$process->isSuccessful()) {
+      throw new ProcessFailedException($process);
+    }
+  }
+  catch (\Throwable $e) {
+    \Drupal::logger('react')->critical(sprintf('Failed to render %s with error %s. %s', $template_file, $e->getMessage(), $process->getErrorOutput()));
+  }
+  return $process->getOutput();
+}

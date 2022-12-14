@@ -1,0 +1,4 @@
+name: React theme engine
+description: 'A theme engine written in React'
+core_version_requirement: ^9 || ^10
+type: theme_engine

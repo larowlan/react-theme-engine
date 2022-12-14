@@ -1,0 +1,26 @@
+{
+  "name": "react_drupal",
+  "version": "1.0.0",
+  "description": "A theme engine that can render JSX for Drupal. See also Jurassic park Jeff Goldblum quote.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "keywords": [
+    "React",
+    "Drupal",
+    "Madness"
+  ],
+  "author": "Lee Rowlands <larowlan@pnx.me>",
+  "license": "GPLv2+",
+  "dependencies": {
+    "@babel/core": "^7.20.5",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-react": "^7.18.6",
+    "chalk": "^5.2.0",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
